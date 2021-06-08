@@ -1,8 +1,11 @@
 package com.example.testbroadcastreceiver;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.PermissionChecker;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -24,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getPhoneStatePermission();
+        getReadCallLogPermission();
         Button button = findViewById(R.id.button);
         testReceiver = new TestReceiver();
         timeChangeRecevier  = new TimeChangeRecevier();
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        registerReceiver(receiver,new IntentFilter(Intent.ACTION_BATTERY_LOW));
+        registerReceiver(receiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
     @Override
@@ -70,4 +76,30 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(testReceiver);
         unregisterReceiver(testReceiver);
     }
+    private void getPhoneStatePermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)!= PermissionChecker.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_STATE},223);
+        }
+    }
+    private void getReadCallLogPermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG)!= PermissionChecker.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CALL_LOG},224);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
